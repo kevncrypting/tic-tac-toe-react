@@ -2,14 +2,26 @@ import React, { useState } from "react";
 import Square from "./Square";
 
 const Board = () => {
-  const [squares, setSquares] = useState(Array(9).fill(null)); // with the useState hook in the parent 'Board' component, we can now share state with each 'Square' component. This will be necessary when creating later functionality, as we need to know when a pattern of three X's or O's has been placed on the board to declare a winner! Here, the default value of the state variable 'squares' is an array of 9 values equal to 'null'.
+  const [xIsNext, setXIsNext] = useState(true); // state variable 'xIsNext' has a default value of 'true' and is updated using the setter function 'setXIsNext'
 
-  // This looks like, const squares = [null, null, null, null, null, null, null, null, null];
+  // Upon initial render, this is what 'xIsNext' looks like:
+  // const xIsNext = true;
 
-  let handleClick = (i: number) => { // creates a handler function for 'onSquareClick' events
-    const nextSquares = squares.slice(); // returns a shallow copy of the 'squares' array - this is what we'll be changing as we never want to change the actual array! (example of enforcing immutability)
-    nextSquares[i] = 'X'; // depending on the 'Square' component clicked, that particular index position of the 'nextSquares' array will be updated from 'null' to 'X'
-    setSquares(nextSquares); // we use the setter function 'setSquares' to update our state variable 'squares' to the value of 'nextSquares' - this lets React know the state has changed and thus will re-render the 'Board' component as well as its child components!
+  const [squares, setSquares] = useState(Array(9).fill(null)); // state variable 'squares' has a default value of an array of 9 'null' values, and is updated using the setter function 'setSquares'
+
+  // Upon initial render, this is what 'squares' looks like:
+  // const squares = [null, null, null, null, null, null, null, null, null];
+
+  let handleClick = (i: number) => { // creates a handler function called 'handleClick' that has a parameter called 'i' of type 'number', handles 'onSquareClick' events
+    if (squares[i]) return; // this makes it so that if a square has already been clicked/assigned a value changing it from its initial 'null', it will return out of the handleClick function early
+
+    const nextSquares = squares.slice(); // returns a shallow copy of the 'squares' array and assigns it to the variable 'nextSquares'
+
+    (xIsNext) ? nextSquares[i] = 'X' : nextSquares[i] = 'O'; // using a ternary operator, checks if state variable 'xIsNext' is equal to true - if so, sets nextSquare[i] (i is the square position) equal to 'X', otherwise if false sets nextSquare[i] equal to 'O'
+
+    setSquares(nextSquares); // updates state variable 'squares' to the value of 'nextSquares' - triggers a state change, causing the 'Board' and its child 'Square' components to re-render
+
+    setXIsNext(!xIsNext); // updates state variable 'xIsNext' to the opposite value of whatever it currently is using the logical NOT! operator
   }
 
   return (
