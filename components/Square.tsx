@@ -1,18 +1,14 @@
 import React from "react";
-import { useState } from "react";
 
-const Square = () => {
-  // useState hook holds an array with a value and a setter function, default value is set to null here
-  const [value, setValue] = useState(null);
+interface SquareProps { // Declaring the type of each prop in an interface here as a feature of TypeScript
+    value: string,
+    onSquareClick: () => void
+}
 
-  let handleClick = () => {
-    // creates a handler function for the click event - when called, 'setValue' changes the 'value' to X
-    setValue("X");
-  };
+const Square = ({ value, onSquareClick }: SquareProps) => { // component Square takes in two props that follow the interface defined above
 
   return (
-    // adds the 'handleClick' function to the button, which is called when the button is clicked
-    <button className="square" onClick={handleClick}>
+    <button className="square" onClick={onSquareClick}>
       {value}
     </button>
   );
